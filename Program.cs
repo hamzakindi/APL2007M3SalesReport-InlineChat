@@ -165,28 +165,27 @@ namespace ReportGenerator
             double profitPercentage = (profit / sales) * 100;
 
             Console.WriteLine("{0}: Sales: {1:C}, Profit: {2:C}, Profit Percentage: {3:F2}%", quarterKey, sales, profit, profitPercentage);
-            }
 
-            // display the quarterly sales and profits report by department
-            Console.WriteLine("\nQuarterly Sales and Profits Report by Department");
-            Console.WriteLine("------------------------------------------------");
+            // display the quarterly sales and profits report by department for the current quarter
+            Console.WriteLine("  By Department:");
+            Console.WriteLine("  +-----------------+-----------------+-----------------+---------------------+");
+            Console.WriteLine("  | {0,-15} | {1,15} | {2,15} | {3,20} |", "Department", "Sales", "Profit", "Profit Percentage");
+            Console.WriteLine("  +-----------------+-----------------+-----------------+---------------------+");
 
             foreach (var department in departmentQuarterlySales)
             {
-            string departmentName = department.Key;
-            Console.WriteLine("\nDepartment: {0}", departmentName);
+                if (department.Value.ContainsKey(quarterKey))
+                {
+                string departmentName = department.Key;
+                double deptSales = department.Value[quarterKey];
+                double deptProfit = departmentQuarterlyProfits[departmentName][quarterKey];
+                double deptProfitPercentage = (deptProfit / deptSales) * 100;
 
-            var orderedDepartmentQuarters = department.Value.OrderBy(q => q.Key);
-
-            foreach (var quarter in orderedDepartmentQuarters)
-            {
-                string quarterKey = quarter.Key;
-                double sales = quarter.Value;
-                double profit = departmentQuarterlyProfits[departmentName][quarterKey];
-                double profitPercentage = (profit / sales) * 100;
-
-                Console.WriteLine("{0}: Sales: {1:C}, Profit: {2:C}, Profit Percentage: {3:F2}%", quarterKey, sales, profit, profitPercentage);
+                Console.WriteLine("  | {0,-15} | {1,15:C} | {2,15:C} | {3,20:F2} |", departmentName, deptSales, deptProfit, deptProfitPercentage);
+                }
             }
+            Console.WriteLine("  +-----------------+-----------------+-----------------+---------------------+");
+            Console.WriteLine();
             }
         }
 
